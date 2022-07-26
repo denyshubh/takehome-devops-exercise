@@ -15,11 +15,14 @@ RUN CGO_ENABLED=0 go build -v -o /$APP_NAME $GOPATH/src/$APP_NAME/$CMD_PATH
  
 # Run Stage
 FROM alpine:3.14
- 
+
+ARG APP_JWT_SECRET
+
 # Set environment variable
+
 ENV APP_NAME devops-test-app
-ENV APP_JWT_SECRET eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTQ3NTU1NTUsImV4cCI6MjU1NDc1NTUwMCwiaWF0IjoxNTU0NzU1NTAwLCJqdGkiOiI5ZmRmMGE2Ni00YzllLTRlOTktODc4MC05YjdlOTNlMjFlMjciLCJ1c2VyX2lkIjoiMTA1YjM1MTgtNjQ2ZC00NjNlLWFkZGEtZDJiOTM5YzJkMDZkIiwidXNlcl9mdWxsX25hbWUiOiJCZXJ0cmFtIEdpbGZveWxlIiwidXNlcl9lbWFpbCI6Im51bGxAcGllZHBpcGVyLmNvbSJ9.-A8Gx18iTikKpedcxDlgcc7D8GMWFix0709Vfpbo1SI
-# Copy only required data into this image
+ENV APP_JWT_SECRET=$APP_JWT_SECRET
+
 COPY --from=build-env /$APP_NAME .
  
 # Expose application port
