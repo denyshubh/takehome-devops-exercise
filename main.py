@@ -2,6 +2,7 @@
 Sample Flask Auth App
 '''
 from flask import Flask
+from flask_api import status
 from config import BaseConfig
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity,jwt_required, unset_jwt_cookies,JWTManager
 import os
@@ -11,16 +12,23 @@ class Users():
     self.userId = user_id
     self.userFullName = user_full_name
     self.userEmail=user_email
+  
+  def to_dict():
+    return {'UserID': self.userId,'FullName': self.userFullName,'Email': self.userEmail}
 
 @app.route('/healthz')
-def index():
-    return 'ok'
+def health():
+    return 'ok', status.HTTP_204_NO_CONTENT
 
 @app.route('/v1/user')
-@jwt_required()
+# @jwt_required()
 def user():
-   user_id, userFullName, userEmail = get_jwt_identity()
-   print( user_id, userFullName, userEmail )
+   if get_jwt_identity():
+     userId, userFullName, userEmail = get_jwt_identity()
+     user = Users(userId, userFullName, userEmail)
+     return user.to_dict(), status.HTTP_200_OK
+   else:
+     return 'Invalid Token!', status.HTTP_400_BAD_REQUEST
 
 jwt = JWTManager()
 
