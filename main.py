@@ -14,12 +14,13 @@ class Users():
 
 @app.route('/healthz')
 def index():
-    return 'index'
+    return 'ok'
 
 @app.route('/v1/user')
-# @jwt_required()
-def login():
-    return 'login'
+@jwt_required()
+def user():
+   user_id, userFullName, userEmail = get_jwt_identity()
+   print( user_id, userFullName, userEmail )
 
 jwt = JWTManager()
 
@@ -28,6 +29,11 @@ def create_app():
   app.config['JWT_SECRET_KEY'] = os.getenv('APP_JWT_SECRET', os.urandom(32))
   jwt.init_app(app)
   return app
+  
+# def generate_temp_auth_token():
+#     user = Users('1', 'Shubham Kumar Singh', 'denyshubham@gmail.com')
+#     auth_token = create_access_token(identity=[user.userId, user.userFullName, user.userEmail], expires_delta=False)  # jason web token  
+#     return auth_token
   
 if __name__=='__main__':
   jwtSampleToken = os.getenv('APP_JWT_SECRET', None)
