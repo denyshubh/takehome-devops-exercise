@@ -3,7 +3,6 @@ Sample Flask Auth App
 '''
 from flask import Flask
 from flask_api import status
-from config import BaseConfig
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity,jwt_required, unset_jwt_cookies,JWTManager
 import os
 
